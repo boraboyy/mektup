@@ -81,19 +81,20 @@
         .floating-heart, .floating-kiss {
             position: absolute;
             font-size: 30px;
-            animation: floatHeart 3s forwards;
+            animation: floatEffect 3s forwards;
         }
 
-        @keyframes floatHeart {
+        @keyframes floatEffect {
             0% {
-                transform: translate(0, 0);
                 opacity: 1;
+                transform: translate(0, 0);
             }
             100% {
-                transform: translate(calc(150px * (Math.random() - 0.5)), calc(150px * (Math.random() - 0.5)));
                 opacity: 0;
+                transform: translate(var(--random-x), var(--random-y));
             }
         }
+
     </style>
 </head>
 <body>
@@ -112,31 +113,40 @@
         </div>
     </div>
 
+    <!-- Ses dosyasını buraya ekliyoruz -->
+    <audio id="openSound" src="your-audio-file.mp3" preload="auto"></audio>
+
     <script>
         function openLetter() {
             document.querySelector('.envelope').classList.toggle('open');
             
-            // Kalp simgelerini rastgele dağıt
+            // Kalp ve öpücük simgelerini rastgele dağıt
             for (let i = 0; i < 20; i++) {
                 createFloatingHeart();
-            }
-            
-            // Öpücük simgelerini rastgele dağıt
-            for (let i = 0; i < 20; i++) {
                 createFloatingKiss();
             }
+
+            // Ses çalma
+            playSound();
         }
 
         function createFloatingHeart() {
             const heart = document.createElement('div');
             heart.classList.add('floating-heart');
-            const randomColor = getRandomColor();  // Rastgele renk seç
             heart.innerText = '❤️';
-            heart.style.color = randomColor;  // Renk uygulama
+
+            // Rastgele x ve y koordinatları için animasyon
+            const randomX = Math.random() * 200 - 100; // -100 ile +100 arasında
+            const randomY = Math.random() * 200 - 100; // -100 ile +100 arasında
+
+            // Random x ve y değerlerini animasyona ekleyelim
+            heart.style.setProperty('--random-x', `${randomX}px`);
+            heart.style.setProperty('--random-y', `${randomY}px`);
+            
             heart.style.left = `${Math.random() * 100 + 10}%`;
             heart.style.top = `${Math.random() * 100 + 10}%`;
             document.body.appendChild(heart);
-            
+
             // Kalbin kaybolması için 3 saniye sonra silinmesi
             setTimeout(() => {
                 heart.remove();
@@ -147,23 +157,32 @@
             const kiss = document.createElement('div');
             kiss.classList.add('floating-kiss');
             kiss.innerText = '😘';
+
+            // Rastgele x ve y koordinatları için animasyon
+            const randomX = Math.random() * 200 - 100; // -100 ile +100 arasında
+            const randomY = Math.random() * 200 - 100; // -100 ile +100 arasında
+
+            // Random x ve y değerlerini animasyona ekleyelim
+            kiss.style.setProperty('--random-x', `${randomX}px`);
+            kiss.style.setProperty('--random-y', `${randomY}px`);
+            
             kiss.style.left = `${Math.random() * 100 + 10}%`;
             kiss.style.top = `${Math.random() * 100 + 10}%`;
             document.body.appendChild(kiss);
-            
+
             // Öpücüğün kaybolması için 3 saniye sonra silinmesi
             setTimeout(() => {
                 kiss.remove();
             }, 3000);
         }
 
-        // Rastgele renk seçme fonksiyonu
-        function getRandomColor() {
-            const colors = ['#FF0000', '#FF69B4', '#8A2BE2'];  // Kırmızı, Pembe, Mor
-            const randomIndex = Math.floor(Math.random() * colors.length);
-            return colors[randomIndex];
+        // Ses çalma fonksiyonu
+        function playSound() {
+            const sound = document.getElementById('openSound');
+            sound.play();
         }
     </script>
 </body>
 </html>
+
 
