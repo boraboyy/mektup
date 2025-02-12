@@ -13,6 +13,7 @@
             background-color: #fce4ec;
             font-family: 'Arial', sans-serif;
             position: relative;
+            overflow: hidden;
         }
         .envelope {
             position: relative;
@@ -76,6 +77,23 @@
         .top-right { top: 10px; right: 10px; }
         .bottom-left { bottom: 10px; left: 10px; }
         .bottom-right { bottom: 10px; right: 10px; }
+
+        .floating-heart, .floating-kiss {
+            position: absolute;
+            font-size: 30px;
+            animation: floatHeart 3s forwards;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(150px * (Math.random() - 0.5)), calc(150px * (Math.random() - 0.5)));
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -93,10 +111,59 @@
             <p><strong>- Bora Yalçınkaya</strong></p>
         </div>
     </div>
+
     <script>
         function openLetter() {
             document.querySelector('.envelope').classList.toggle('open');
+            
+            // Kalp simgelerini rastgele dağıt
+            for (let i = 0; i < 20; i++) {
+                createFloatingHeart();
+            }
+            
+            // Öpücük simgelerini rastgele dağıt
+            for (let i = 0; i < 20; i++) {
+                createFloatingKiss();
+            }
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            const randomColor = getRandomColor();  // Rastgele renk seç
+            heart.innerText = '❤️';
+            heart.style.color = randomColor;  // Renk uygulama
+            heart.style.left = `${Math.random() * 100 + 10}%`;
+            heart.style.top = `${Math.random() * 100 + 10}%`;
+            document.body.appendChild(heart);
+            
+            // Kalbin kaybolması için 3 saniye sonra silinmesi
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
+        }
+
+        function createFloatingKiss() {
+            const kiss = document.createElement('div');
+            kiss.classList.add('floating-kiss');
+            kiss.innerText = '😘';
+            kiss.style.left = `${Math.random() * 100 + 10}%`;
+            kiss.style.top = `${Math.random() * 100 + 10}%`;
+            document.body.appendChild(kiss);
+            
+            // Öpücüğün kaybolması için 3 saniye sonra silinmesi
+            setTimeout(() => {
+                kiss.remove();
+            }, 3000);
+        }
+
+        // Rastgele renk seçme fonksiyonu
+        function getRandomColor() {
+            const colors = ['#FF0000', '#FF69B4', '#8A2BE2'];  // Kırmızı, Pembe, Mor
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return colors[randomIndex];
         }
     </script>
 </body>
 </html>
+
