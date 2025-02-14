@@ -1,165 +1,73 @@
-/*Basics*/
-* {
-  margin: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Zeyada&display=swap');
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  cursor: none;
-}
+
+
 
 body {
-  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-size: 1000px;
+  background-image: url("https://www.psdgraphics.com/wp-content/uploads/2022/01/white-math-paper-texture.jpg");
+  background-position: center center;
+}
+
+.paper {
+  background-image: url("https://i0.wp.com/textures.world/wp-content/uploads/2018/10/2-Millimeter-Paper-Background-copy.jpg?ssl=1");
+  background-size: 500px;
+  background-position: center center;
+  padding: 20px 100px;
+/*  min-width: 800px; */
   
+  transform: rotateZ(-5deg);
+  box-shadow: 1px 15px 20px 0px rgba(0,0,0,0.5);
+  
+  position: absolute;
 }
 
-input {
-  display: none;
-}
-
-/*Circle and hearts*/
-.circle {
-  background: #EF476F;
+.paper.heart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  padding: 0;
   border-radius: 50%;
-  left: calc(50% - 10px);
-  top: 252px;
-  transition: all .5s cubic-bezier(0.22, 0.53, 0.37, 1.41);
 }
 
-.hearts, .hearts:before, .hearts:after, .circle {
-  display: block;
-  width: 20px;
-  height: 20px;
-  position: absolute;
+.paper.image {
+  padding: 10px;
 }
-
-.hearts {
-  transform: rotate(-45deg);
-}
-
-.hearts:before, .hearts:after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  background: inherit;
-}
-
-.hearts:before {
-  left: 12px;
-}
-
-.hearts:after {
-  top: -12px;
-}
-
-#heart {
-  background: #D33F49;
-  z-index: 2;
-  pointer-events: none;
-}
-
-#heartholder {
-  top: 255px;
-  left: calc(50% - 10px);
-  cursor: none;
-  z-index: 1;
-  background: #f697e1;
-  transition: all .2s ease-in;
-}
-
-/*Transform heart into key*/
-#heartholder:hover {
-  background: #ad6a9e;
-}
-
-#heartholder:hover ~ #heart{
-  width: 7px;
-  height: 27px;
-  background: #ffcf0d;
-}
-
-
-#heartholder:hover ~ #heart:after {
-  left: -7px;
-  top: -19px;
-  width: 12px;
-  height: 12px;
-  background: transparent;
-  border: 5px #ffcf0d solid;
-}
-
-#heartholder:hover ~ #heart:before {
-  border-radius: 0;
-  top: 12px;
-  left: 0;
-  border-color: #ffcf0d;
-  border-width: 4px;
-  border-top-style: solid;
-  border-bottom-style: solid;
-  background: transparent;
-  height: 9px;
-}
-
-/*Make the circle appear*/
-#heartInput:checked ~ .circle {
-  width: 400px;
-  height: 400px;
-  left: calc(50% - 200px);
-  top: 50px;
-}
-
-/*Message to the loved one*/
-.message, label.lang {
-  font-family: 'Cabin', sans-serif;
-}
-
-.message {
-  position: absolute;
-  width: 300px;
-  color: white;
-  font-size: 18px;
-  text-align: center;
-  margin: 0 auto;
-  line-height: 1.5;
-  top: 150px;
-  left: calc(50% - 150px);
-  opacity: 0;
-}
-
-.message p:first-child {
-  margin-bottom: 70px;
-}
-
-.love {
-  font-family: 'Lobster', cursive;
+.paper.image p {
   font-size: 30px;
 }
 
-/*Change language*/
-
-label.lang {
-  margin-right: 15px;
-  display: block;
-  float: right;
-  color: #aaa;
-  padding: 15px 5px;
-  position: relative;
-  z-index: 5;
-  cursor: pointer;
+img {
+  max-height: 200px;
+  width: 100%;
+  user-select: none;
 }
 
-input[type="radio"]:checked + label, label.lang:hover { 
-  font-weight: bold; 
-  text-decoration: underline;
-  color: #383838;
-} 
-
-#checkENG:checked ~ .message.eng {
-  opacity: 1;
+.paper.heart::after {
+  content: "";
+  background-image: url('https://cdn.pixabay.com/photo/2016/03/31/19/25/cartoon-1294994__340.png');
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: 150px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.6;
 }
 
-#checkFR:checked ~ .message.fr {
-  opacity: 1;
+p {
+  font-family: 'Zeyada';
+  font-size: 50px;
+  color: rgb(0,0,100);
+  opacity: 0.75;
+  user-select: none;
+  
+  // filter: drop-shadow(2px 1.5px 1px rgba(0,0,105,0.9));
 }
