@@ -1,178 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8">
   <title>Drag Papers ❤️</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Short+Stack&family=Homemade+Apple&display=swap">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: 'Short Stack', cursive;
-      background-color: #f0f0f0;
-    }
-    .paper {
-      position: absolute;
-      width: 200px;
-      height: 200px;
-      background-color: white;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      cursor: grab;
-      user-select: none;
-    }
-    .paper.heart {
-      background-color: #ffcccc;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: red;
-    }
-    .paper.red {
-      background-color: #ff6666;
-      color: white;
-    }
-    .paper.image img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
-    .paper p {
-      margin: 0;
-      font-size: 18px;
-    }
-  </style>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Short+Stack&amp;family=Homemade+Apple&amp;display=swap'><link rel="stylesheet" href="./style.css">
+
 </head>
 <body>
 
-<div class="paper heart">❤️</div>
+<div class="paper heart">
 
+</div>
+
+  
 <div class="paper image">
-  <p>and I fallen in</p>
-  <p>Love with You 😍</p>
-  <img src="images/1.jpeg" alt="Image 1" />
+  <p> and I fallen in</p>
+    <p>Love with You 😍 </p>
+   <img src="images/1.jpeg" />
 </div>
 
 <div class="paper image">
-  <img src="images/2.jpeg" alt="Image 2" />
+  <p</p>
+  <img src="images/2.jpeg" />
 </div>
 
 <div class="paper image">
-  <p>How can be</p>
-  <p>someone so cute ❤️</p>
-  <img src="images/3.jpg" alt="Image 3" />
+  <p>How can be </p>
+   <p> someone so cute ❤️ </p>
+
+  <img src="images/3.jpg" />
 </div>
 
 <div class="paper red">
-  <p class="p1">and My Favorite</p>
-  <p class="p2">Person 😍</p>
+<p class="p1"> and My Favorite</p>
+<p class="p2">Person 😍</p>
 </div>
 
 <div class="paper">
-  <p class="p1">You are Cute</p>
+<p class="p1">You are Cute </p>
   <p class="p1">Amazing <span style="color: red !important;">❤️</span></p>
 </div>
 
 <div class="paper">
-  <p class="p1">Drag the papers to move!</p>
+<p class="p1">Drag the papers to move!</p>
 </div>
-
-<script>
-  let highestZ = 1;
-
-  class Paper {
-    holdingPaper = false;
-    mouseTouchX = 0;
-    mouseTouchY = 0;
-    mouseX = 0;
-    mouseY = 0;
-    prevMouseX = 0;
-    prevMouseY = 0;
-    velX = 0;
-    velY = 0;
-    rotation = Math.random() * 30 - 15;
-    currentPaperX = 0;
-    currentPaperY = 0;
-    rotating = false;
-
-    init(paper) {
-      document.addEventListener('mousemove', (e) => {
-        if (!this.rotating) {
-          this.mouseX = e.clientX;
-          this.mouseY = e.clientY;
-
-          this.velX = this.mouseX - this.prevMouseX;
-          this.velY = this.mouseY - this.prevMouseY;
-        }
-
-        const dirX = e.clientX - this.mouseTouchX;
-        const dirY = e.clientY - this.mouseTouchY;
-        const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
-
-        if (dirLength !== 0) {
-          const dirNormalizedX = dirX / dirLength;
-          const dirNormalizedY = dirY / dirLength;
-
-          const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
-          let degrees = (180 * angle) / Math.PI;
-          degrees = (360 + Math.round(degrees)) % 360;
-
-          if (this.rotating) {
-            this.rotation = degrees;
-          }
-        }
-
-        if (this.holdingPaper) {
-          if (!this.rotating) {
-            this.currentPaperX += this.velX;
-            this.currentPaperY += this.velY;
-          }
-          this.prevMouseX = this.mouseX;
-          this.prevMouseY = this.mouseY;
-
-          paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
-          paper.style.webkitTransform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
-        }
-      });
-
-      paper.addEventListener('mousedown', (e) => {
-        if (this.holdingPaper) return;
-        this.holdingPaper = true;
-
-        paper.style.zIndex = highestZ;
-        highestZ += 1;
-
-        if (e.button === 0) {
-          this.mouseTouchX = this.mouseX;
-          this.mouseTouchY = this.mouseY;
-          this.prevMouseX = this.mouseX;
-          this.prevMouseY = this.mouseY;
-        }
-        if (e.button === 2) {
-          this.rotating = true;
-        }
-      });
-
-      window.addEventListener('mouseup', () => {
-        this.holdingPaper = false;
-        this.rotating = false;
-      });
-
-      paper.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-      });
-    }
-  }
-
-  const papers = Array.from(document.querySelectorAll('.paper'));
-  papers.forEach((paper) => {
-    const p = new Paper();
-    p.init(paper);
-  });
-</script>
+<!-- partial -->
+  <script  src="./script.js"></script>
 
 </body>
 </html>
