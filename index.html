@@ -3,6 +3,7 @@
 <head>
     <title>Bora'dan Betül'e</title>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobil uyumluluk için eklendi -->
     <style>
         :root {
             --color-env: #FFB7C5;
@@ -21,7 +22,7 @@
             border-bottom-left-radius: 6px;
             border-bottom-right-radius: 6px;
             margin: 0 auto;
-            top: 150px;
+            top: 50px; /* Mobilde daha iyi konumlandırma */
             background-color: var(--color-flap);
             box-shadow: 0 4px 20px rgba(0,0,0,.1);
             cursor: pointer;
@@ -129,8 +130,6 @@
             z-index: 2;
         }
 
-        
-
         .letter-corner {
             position: absolute;
             width: 20px;
@@ -226,11 +225,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center; /* Mobilde ortalamak için eklendi */
         }
 
         .reset {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 20px; /* Mobilde daha az boşluk */
         }
 
         .reset button {
@@ -253,6 +253,21 @@
             transform: translateY(-3px) scale(1.05);
             box-shadow: 0 7px 25px rgba(0,0,0,0.2);
         }
+
+        /* Mobil cihazlar için ek stil */
+        @media (max-width: 600px) {
+            #envelope {
+                top: 30px; /* Mobilde daha iyi konumlandırma */
+            }
+
+            .envlope-wrapper {
+                margin-top: 20px; /* Mobilde daha az boşluk */
+            }
+
+            .reset {
+                margin-top: 10px; /* Mobilde daha az boşluk */
+            }
+        }
     </style>
 </head>
 <body>
@@ -265,7 +280,7 @@
                 <div class="letter-corner corner-tl"></div>
                 <div class="letter-corner corner-br"></div>
                 <div class="message">
-                    <p>Betül,seni ÇOK seviyorum</p>
+                    <p>Betül, seni ÇOK seviyorum</p>
                     <p></p>
                 </div>
             </div>
@@ -282,8 +297,8 @@
         </div>
     </div>
     <div class="reset">
-        <button id="open">Mektupu Aç</button>
-        <button id="reset">Mektupu Kapat</button>
+        <button id="open">Mektubu Aç</button>
+        <button id="reset">Mektubu Kapat</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -308,3 +323,4 @@
     </script>
 </body>
 </html>
+
