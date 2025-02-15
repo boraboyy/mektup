@@ -16,6 +16,7 @@ class Paper {
   rotating = false;
 
   init(paper) {
+    // Fare ve dokunma olaylarını yönet
     const moveHandler = (x, y) => {
       if (!this.rotating) {
         this.mouseX = x;
@@ -34,7 +35,6 @@ class Paper {
       if (dirLength !== 0) {
         const dirNormalizedX = dirX / dirLength;
         const dirNormalizedY = dirY / dirLength;
-
         const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
         let degrees = (180 * angle) / Math.PI;
         degrees = (360 + Math.round(degrees)) % 360;
@@ -54,52 +54,60 @@ class Paper {
         this.prevMouseY = this.mouseY;
 
         // Transform uygulama
-        paper.style.transform = `translate(${this.currentPaperX}px, ${this.currentPaperY}px) rotate(${this.rotation}deg)`;
+        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+        paper.style.webkitTransform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
       }
     };
 
-    // Mouse ve touch hareketi dinleyicisi
-    document.addEventListener('mousemove', (e) => moveHandler(e.clientX, e.clientY));
-    document.addEventListener('touchmove', (e) => {
-      const touch = e.touches[0];
-      moveHandler(touch.clientX, touch.clientY);
-    });
+    // Fare ve dokunma olaylarını dinle
+    const onMouseMove = (e) => moveHandler(e.clientX, e.clientY);
+    const onTouchMove = (e) => {
+      e.preventDefault(); // Sayfa kaymasını engelle
+      moveHandler(e.touches[0].clientX, e.touches[0].clientY);
+    };
 
-    // Kağıt basıldığında
-    const downHandler = (x, y) => {
-      if (this.holdingPaper) return;
+    // Dokunma veya fare ile tıklama
+    const startHandler = (x, y, isTouch = false) => {
+      if (this.holdingPaper) return; // Zaten tutuluyorsa işlem yapma
       this.holdingPaper = true;
+      paper.style.zIndex = highestZ;
+      highestZ += 1;
+
       this.mouseTouchX = x;
       this.mouseTouchY = y;
       this.prevMouseX = x;
       this.prevMouseY = y;
-
-      // Kağıdı en üste getir
-      paper.style.zIndex = highestZ;
-      highestZ += 1;
+      
+      if (isTouch) {
+        document.addEventListener("touchmove", onTouchMove, { passive: false });
+        document.addEventListener("touchend", endHandler);
+      } else {
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", endHandler);
+      }
     };
 
-    paper.addEventListener('mousedown', (e) => downHandler(e.clientX, e.clientY));
-    paper.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
-      downHandler(touch.clientX, touch.clientY);
-    });
-
-    // Bırakma eventleri
-    const upHandler = () => {
+    // Bırakma olayları
+    const endHandler = () => {
       this.holdingPaper = false;
       this.rotating = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", endHandler);
+      document.removeEventListener("touchmove", onTouchMove);
+      document.removeEventListener("touchend", endHandler);
     };
 
-    window.addEventListener('mouseup', upHandler);
-    window.addEventListener('touchend', upHandler);
+    // Olayları ata
+    paper.addEventListener("mousedown", (e) => startHandler(e.clientX, e.clientY));
+    paper.addEventListener("touchstart", (e) => startHandler(e.touches[0].clientX, e.touches[0].clientY, true), { passive: false });
 
-    // Sağ tıklama menüsünü engelle
-    paper.addEventListener('contextmenu', (e) => e.preventDefault());
+    // Sağ tıklama engelle
+    paper.addEventListener("contextmenu", (e) => e.preventDefault());
   }
 }
 
-// Tüm .paper elementlerini başlat
-document.querySelectorAll('.paper').forEach((paper) => {
+// Tüm .paper elementlerini seç ve başlat
+document.querySelectorAll(".paper").forEach((paper) => {
   new Paper().init(paper);
 });
+
