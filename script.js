@@ -16,11 +16,10 @@ class Paper {
   rotating = false;
 
   init(paper) {
-    // Fare hareketi dinleyicisi
-    document.addEventListener('mousemove', (e) => {
+    const moveHandler = (x, y) => {
       if (!this.rotating) {
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
+        this.mouseX = x;
+        this.mouseY = y;
 
         // Hız hesaplama
         this.velX = this.mouseX - this.prevMouseX;
@@ -28,11 +27,10 @@ class Paper {
       }
 
       // Döndürme için açı hesaplama
-      const dirX = e.clientX - this.mouseTouchX;
-      const dirY = e.clientY - this.mouseTouchY;
+      const dirX = x - this.mouseTouchX;
+      const dirY = y - this.mouseTouchY;
       const dirLength = Math.sqrt(dirX * dirX + dirY * dirY);
 
-      // Sıfıra bölme hatasını önleme
       if (dirLength !== 0) {
         const dirNormalizedX = dirX / dirLength;
         const dirNormalizedY = dirY / dirLength;
@@ -55,48 +53,53 @@ class Paper {
         this.prevMouseX = this.mouseX;
         this.prevMouseY = this.mouseY;
 
-        // Transform uygulama (tarayıcı uyumluluğu ile)
-        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
-        paper.style.webkitTransform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+        // Transform uygulama
+        paper.style.transform = `translate(${this.currentPaperX}px, ${this.currentPaperY}px) rotate(${this.rotation}deg)`;
       }
+    };
+
+    // Mouse ve touch hareketi dinleyicisi
+    document.addEventListener('mousemove', (e) => moveHandler(e.clientX, e.clientY));
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      moveHandler(touch.clientX, touch.clientY);
     });
 
-    // Fare tıklaması dinleyicisi
-    paper.addEventListener('mousedown', (e) => {
-      if (this.holdingPaper) return; // Zaten tutuluyorsa işlem yapma
+    // Kağıt basıldığında
+    const downHandler = (x, y) => {
+      if (this.holdingPaper) return;
       this.holdingPaper = true;
+      this.mouseTouchX = x;
+      this.mouseTouchY = y;
+      this.prevMouseX = x;
+      this.prevMouseY = y;
 
-      // Kağıdı en üste getirme
+      // Kağıdı en üste getir
       paper.style.zIndex = highestZ;
       highestZ += 1;
+    };
 
-      if (e.button === 0) { // Sol tıklama
-        this.mouseTouchX = this.mouseX;
-        this.mouseTouchY = this.mouseY;
-        this.prevMouseX = this.mouseX;
-        this.prevMouseY = this.mouseY;
-      }
-      if (e.button === 2) { // Sağ tıklama
-        this.rotating = true;
-      }
+    paper.addEventListener('mousedown', (e) => downHandler(e.clientX, e.clientY));
+    paper.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      downHandler(touch.clientX, touch.clientY);
     });
 
-    // Fare bırakma dinleyicisi
-    window.addEventListener('mouseup', () => {
+    // Bırakma eventleri
+    const upHandler = () => {
       this.holdingPaper = false;
       this.rotating = false;
-    });
+    };
 
-    // Sağ tıklama menüsünü engelleme
-    paper.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
+    window.addEventListener('mouseup', upHandler);
+    window.addEventListener('touchend', upHandler);
+
+    // Sağ tıklama menüsünü engelle
+    paper.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 }
 
-// Tüm .paper elementlerini seç ve Paper sınıfı ile başlat
-const papers = Array.from(document.querySelectorAll('.paper'));
-papers.forEach((paper) => {
-  const p = new Paper();
-  p.init(paper);
+// Tüm .paper elementlerini başlat
+document.querySelectorAll('.paper').forEach((paper) => {
+  new Paper().init(paper);
 });
